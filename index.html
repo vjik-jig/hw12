@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Function Constructor</title>
+  </head>
+  <body>
+    <script>
+      function Student(name, surname, bday, sex) {
+        (this.name = name),
+          (this.surname = surname),
+          (this.age = this.getAge(bday)),
+          (this.sex = sex),
+          (this.marks = new Array()),
+          (this.attendance = new Array());
+      }
+
+      Student.prototype.getAge = function(dateStr) {
+        let birth = new Date(dateStr);
+        let currentYear = new Date();
+        let yearIsCounted =
+          birth.getMonth() > currentYear.getMonth()
+            ? 1
+            : birth.getMonth() < currentYear.getMonth()
+            ? 0
+            : birth.getDate() > currentYear.getDate();
+        return currentYear.getFullYear() - birth.getFullYear() - yearIsCounted;
+      };
+
+      Student.prototype.mark = function(number) {
+        if (this.marks.length < 30) {
+          this.marks.push(number);
+        } else {
+          console.log("Marks Array is Full !");
+        }
+      };
+
+      Student.prototype.present = function() {
+        if (this.attendance.length < 30) {
+          this.attendance.push(true);
+        } else {
+          console.log("Attendance Array is Full !");
+        }
+      };
+      Student.prototype.absent = function() {
+        if (this.attendance.length < 30) {
+          this.attendance.push(false);
+        } else {
+          console.log("Attendance Array is Full !");
+        }
+      };
+
+      Student.prototype.summary = function() {
+        let averageMark =
+          this.marks.reduce(function(sum, current) {
+            return (sum += current);
+          }) / this.marks.length;
+        let averageAttendance =
+          this.attendance.filter(function(item) {
+            return item === true;
+          }).length / this.attendance.length;
+        return averageMark >= 9 && averageAttendance >= 0.9
+          ? "Ути какой молодчинка!"
+          : averageMark >= 9 || averageAttendance >= 0.9
+          ? "Норм, но можно лучше"
+          : "Редиска!";
+      };
+
+      let ivan = new Student("Ivan", "Popov", "08/22/1983", "male");
+      ivan.mark(10);
+      ivan.mark(10);
+      ivan.mark(7);
+      ivan.mark(10);
+      ivan.mark(10);
+      ivan.present();
+      ivan.present();
+      ivan.present();
+      ivan.present();
+      ivan.present();
+      ivan.present();
+      ivan.present();
+      ivan.present();
+      ivan.present();
+      ivan.absent();
+
+      console.log(ivan);
+      console.log(ivan.summary());
+    </script>
+  </body>
+</html>
