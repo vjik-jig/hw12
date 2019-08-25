@@ -17,8 +17,8 @@
           (this.attendance = new Array(30));
       }
 
-      Student.prototype.getAge = function(dateStr) {
-        let birth = new Date(dateStr);
+      Student.prototype.getAge = function() {
+        let birth = new Date(this.birthDay);
         let currentYear = new Date();
         let yearIsCounted =
           birth.getMonth() > currentYear.getMonth()
@@ -107,6 +107,7 @@
       ivan.absent();
 
       console.log(ivan);
+      console.log(ivan.getAge());
       console.log(ivan.summary());
     </script>
   </body>
