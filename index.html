@@ -11,10 +11,10 @@
       function Student(name, surname, bday, sex) {
         (this.name = name),
           (this.surname = surname),
-          (this.age = this.getAge(bday)),
+          (this.birthDay = bday),
           (this.sex = sex),
-          (this.marks = new Array()),
-          (this.attendance = new Array());
+          (this.marks = new Array(30)),
+          (this.attendance = new Array(30));
       }
 
       Student.prototype.getAge = function(dateStr) {
@@ -29,38 +29,58 @@
         return currentYear.getFullYear() - birth.getFullYear() - yearIsCounted;
       };
 
+      Student.prototype.getIndexOfEmpty = function(arr) {
+        for (let i = 0; i < arr.length; i++) {
+          if (!(i in arr)) return i;
+        }
+      };
+
       Student.prototype.mark = function(number) {
-        if (this.marks.length < 30) {
-          this.marks.push(number);
+        let index = this.getIndexOfEmpty(this.marks);
+        if (
+          this.marks.includes(undefined) &&
+          this.marks[index] !== index in this.marks
+        ) {
+          this.marks.splice(index, 1, number);
         } else {
           console.log("Marks Array is Full !");
         }
       };
 
       Student.prototype.present = function() {
-        if (this.attendance.length < 30) {
-          this.attendance.push(true);
+        let index = this.getIndexOfEmpty(this.attendance);
+        if (
+          this.attendance.includes(undefined) &&
+          this.attendance[index] !== index in this.marks
+        ) {
+          this.attendance.splice(index, 1, true);
         } else {
           console.log("Attendance Array is Full !");
         }
       };
       Student.prototype.absent = function() {
-        if (this.attendance.length < 30) {
-          this.attendance.push(false);
+        let index = this.getIndexOfEmpty(this.attendance);
+        if (
+          this.attendance.includes(undefined) &&
+          this.attendance[index] !== index in this.marks
+        ) {
+          this.attendance.splice(index, 1, false);
         } else {
           console.log("Attendance Array is Full !");
         }
       };
 
       Student.prototype.summary = function() {
+        let arrMarksLength = this.getIndexOfEmpty(this.marks);
+        let arrAttendanceLength = this.getIndexOfEmpty(this.attendance);
         let averageMark =
           this.marks.reduce(function(sum, current) {
             return (sum += current);
-          }) / this.marks.length;
+          }) / arrMarksLength;
         let averageAttendance =
           this.attendance.filter(function(item) {
             return item === true;
-          }).length / this.attendance.length;
+          }).length / arrAttendanceLength;
         return averageMark >= 9 && averageAttendance >= 0.9
           ? "Ути какой молодчинка!"
           : averageMark >= 9 || averageAttendance >= 0.9
@@ -71,9 +91,10 @@
       let ivan = new Student("Ivan", "Popov", "08/22/1983", "male");
       ivan.mark(10);
       ivan.mark(10);
-      ivan.mark(7);
+      ivan.mark(8);
+      ivan.mark(9);
       ivan.mark(10);
-      ivan.mark(10);
+      ivan.mark(9);
       ivan.present();
       ivan.present();
       ivan.present();
